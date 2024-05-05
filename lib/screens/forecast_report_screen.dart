@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_test/extensions/datetime.dart';
 
 import '/constants/app_colors.dart';
 import '/constants/text_styles.dart';
@@ -11,40 +12,40 @@ class ForecastReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GradientContainer(
+    return GradientContainer(
       children: [
         // Page Title
-        Text(
+        const Text(
           'Forecast Report',
           style: TextStyles.h1,
         ),
 
-        SizedBox(height: 40),
+        const SizedBox(height: 40),
 
         // Today's date
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Today',
               style: TextStyles.h2,
             ),
             Text(
-              'April 30, 2024',
+              DateTime.now().dateTime,
               style: TextStyles.subtitleText,
             ),
           ],
         ),
 
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         // Today's forecast
-        HourlyForecastView(),
+        const HourlyForecastView(),
 
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         // Next Forecast
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -58,10 +59,14 @@ class ForecastReportScreen extends StatelessWidget {
           ],
         ),
 
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
 
         // Weekly forecast
-        WeeklyForecastView(),
+        const WeeklyForecastView(),
+
+        const SizedBox(
+          height: kBottomNavigationBarHeight + kToolbarHeight,
+        ),
       ],
     );
   }

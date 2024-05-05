@@ -1,32 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:new_test/extensions/datetime.dart';
+import 'package:new_test/providers/get_weekly_forecast_provider.dart';
+import 'package:new_test/utils/utils.dart';
 
 import '/constants/app_colors.dart';
 import '/constants/text_styles.dart';
 import '/core/widgets/subscript_text.dart';
 
-class WeeklyForecastView extends StatefulWidget {
+class WeeklyForecastView extends ConsumerWidget {
   const WeeklyForecastView({super.key});
 
   @override
-  State<WeeklyForecastView> createState() => _WeeklyForecastViewState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weeklyForecast = ref.watch(weeklyForecastProvider);
 
-class _WeeklyForecastViewState extends State<WeeklyForecastView> {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 7,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return const WeeklyForecastTile(
-            date: 'April, 30',
-            day: 'Friday',
-            icon: '01d',
-            temp: 30,
-          );
-        },
-      ),
+    return weeklyForecast.when(
+      data: (weatherData) {
+        return Expanded(
+          child: ListView.builder(
+            itemCount: 7,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final dayOfWeek =
+                  DateTime.parse(weatherData.daily.time[index]).dayOfWeek;
+              final date = weatherData.daily.time[index];
+              final temp = weatherData.daily.temperature2mMax[index];
+              final icon = weatherData.daily.weatherCode[index];
+
+              print(icon);
+
+              return WeeklyForecastTile(
+                date: date,
+                day: dayOfWeek,
+                icon: getWeatherIcon(icon),
+                temp: temp.round(),
+              );
+            },
+          ),
+        );
+      },
+      error: (error, stackTrace) {
+        return Center(
+          child: Text(
+            error.toString(),
+          ),
+        );
+      },
+      loading: () {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 }
@@ -86,7 +111,7 @@ class WeeklyForecastTile extends StatelessWidget {
 
           // weather icon
           Image.asset(
-            'assets/icons/$icon.png',
+            icon,
             width: 60,
           ),
         ],

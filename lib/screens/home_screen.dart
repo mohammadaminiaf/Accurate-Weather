@@ -33,8 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
       body: _screens[_currentPageIndex],
       bottomNavigationBar: NavigationBarTheme(
         data: const NavigationBarThemeData(
